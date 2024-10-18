@@ -13,6 +13,11 @@ public class Discount {
         this.percentage = percentage;
     }
 
+    public boolean isValid()  {
+        LocalDate currentDate = LocalDate.now();
+        return (currentDate.isEqual(from) || currentDate.isAfter(from)) &&
+                (currentDate.isEqual(to) || currentDate.isBefore(to));
+    }
     public LocalDate getFrom() {
         return from;
     }
