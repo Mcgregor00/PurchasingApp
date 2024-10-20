@@ -26,6 +26,9 @@ public class Customer {
         deliveryAddresses.add(new Address(street, postalCode, number, city));
     }
 
+    public String getAllName(){
+        return name + " " + surname;
+    }
     public Email getEmail() {
         return email;
     }
