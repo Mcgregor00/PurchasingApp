@@ -1,6 +1,7 @@
 package org.ulpgc.is1.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Product {
     public final int id;
@@ -65,5 +66,18 @@ public class Product {
 
     public Purchase getPurchase() {
         return purchase;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id == product.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
