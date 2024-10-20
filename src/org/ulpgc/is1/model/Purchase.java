@@ -9,6 +9,8 @@ public class Purchase {
     private Customer customer;
     private Address address;
     private Product product;
+    private Payment payment;
+    private Boolean isPaid;
 
     public Purchase(Customer customer, Product product) {
         this.customer = customer;
@@ -16,11 +18,25 @@ public class Purchase {
         this.id = NEXT_ID++;
         this.date = LocalDate.now();
         this.address = customer.getDeliveryAddresses().get(0);
+        this.isPaid = false;
     }
 
-    public float price() {
+    public void setPayment(String card) {
+        this.payment = new Payment(this.price(), card);
+        isPaid = true;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public Boolean isPaid() {
+        return isPaid;
+    }
+
+    public int price() {
         if (product.getDiscount() != null && product.getDiscount().isValid()) {
-            return product.getPrice() * product.getDiscount().getPercentage();
+            return (int) ((int) product.getPrice() * product.getDiscount().getPercentage());
         }
         return product.getPrice();
     }
