@@ -11,9 +11,10 @@ public class Customer {
     private String name;
     private String surname;
 
-    public Customer(String name, String surname) {
+    public Customer(String name, String surname, Email email) {
         this.name = name;
         this.surname = surname;
+        this.email= email;
         this.deliveryAddresses = new ArrayList<Address>();
         this.purchases = new ArrayList<Purchase>();
     }
