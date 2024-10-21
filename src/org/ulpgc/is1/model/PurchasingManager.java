@@ -1,6 +1,7 @@
 package org.ulpgc.is1.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,40 +71,6 @@ public class PurchasingManager {
         return getCustomer(name, surname, account).getPurchases();
     }
 
-    public void data(int numCustomer, int numPurchase) {
-        LocalDate currentDate = LocalDate.now();
-        Customer customer = customers.get(numCustomer - 1);
-        Purchase purchase = customer.getPurchase(numPurchase);
-        System.out.println("El cliente " + numCustomer + " tiene " + customer.getPurchases().size() + " compras.");
-        System.out.println();
-        System.out.println("__________________________________________________________________________________________");
-        System.out.println("Nombre: " + customer.getAllName() + ". Con email: " + customer.getEmail().getAccount());
-        System.out.println("__________________________________________________________________________________________");
-        System.out.println();
-        System.out.println("Compra: " + numPurchase);
-        System.out.println("-----------------------------");
-        System.out.println("-> Datos de la compra: ");
-        System.out.println("        - Fecha de la compra: " + currentDate);
-        System.out.println("        - Punto de entrega:");
-        System.out.println("                Calle: " + purchase.getAddress().getStreet());
-        System.out.println("                Número: " + purchase.getAddress().getNumber());
-        System.out.println("                Codigo Postál: " + purchase.getAddress().getPostalCode());
-        System.out.println("                Ciudad: " + purchase.getAddress().getCity());
-        System.out.println("        - Nº Targeta: " + purchase.getPayment().getCard());
-        System.out.println("        - Cobro total: " + purchase.price());
-        System.out.println("-> Datos del producto: ");
-        System.out.println("        - ID del producto: " + purchase.getProduct().getId());
-        System.out.println("        - Nombre del producto: " + purchase.getProduct().getName());
-        System.out.println("        - Descripcion del producto: " + purchase.getProduct().getDescription());
-        System.out.println("        - Categoría del producto: " + purchase.getProduct().getCategory());
-        System.out.println("        - Precio del producto: " + purchase.getProduct().getPrice());
-        System.out.println("        - Descuento: " + purchase.getProduct().getDiscount().getPercentage()*100 + "%");
-        System.out.println("                - Desde el: " + purchase.getProduct().getDiscount().getFrom());
-        System.out.println("                - Hasta el: " + purchase.getProduct().getDiscount().getTo());
-        System.out.println("        - Total descontado: " + (purchase.getProduct().getPrice() - purchase.price()));
-        System.out.println("----------------------------");
-    }
-
     public List<Customer> getCustomers() {
         return customers;
     }
@@ -111,6 +78,62 @@ public class PurchasingManager {
     public List<Product> getProducts() {
         return products;
     }
+
+    public void customerData(Customer customer) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\nEl cliente ").append(customer.getName()).append(" tiene ")
+                .append(customer.getPurchases().size()).append(" reservas\n\n")
+                .append("===========================================================\n")
+                .append("\tCompras de ").append(customer.getAllName()).append("\n");
+
+        String emailStatus = customer.getEmail().isValid() ? "Valido" : "Invalido, cambie el Email por favor";
+        sb.append("\t--Email: ").append(customer.getEmail().getAccount()).append(" (").append(emailStatus).append(")\n")
+                .append("===========================================================\n\n");
+
+        for (Purchase purchase : customer.getPurchases()) {
+            sb.append("_______________________________________________\n")
+                    .append("Compra ").append(purchase.getId()).append("\n")
+                    .append("················································\n")
+                    .append("\t| Datos de la compra: |\n")
+                    .append("\t\t--Código de la compra: ").append(purchase.getId()).append("\n")
+                    .append("\t\t--Fecha de la compra: ").append(purchase.getDate().format(formatter)).append("\n")
+                    .append("\t\t--Direccion: ").append(purchase.getAddress()).append("\n");
+
+            if (purchase.isPaid()) {
+                sb.append("\t\t--Compra pagada\n")
+                        .append("\t\t\t> Card: ").append(purchase.getPayment().getCard()).append("\n")
+                        .append("\t\t\t> Cantidad: ").append(purchase.getPayment().getAmount()).append("\n")
+                        .append("\t\t\t> Fecha de pago: ").append(purchase.getPayment().getDate().format(formatter)).append("\n");
+            } else {
+                sb.append("\t\t--Compra no pagada\n");
+            }
+
+            sb.append("\t| Datos del producto: |\n")
+                    .append("\t\t--Código: ").append(purchase.getProduct().id).append("\n")
+                    .append("\t\t--Nombre: ").append(purchase.getProduct().getName()).append("\n")
+                    .append("\t\t--Descripción: ").append(purchase.getProduct().getDescription()).append("\n")
+                    .append("\t\t--Categoria: ").append(purchase.getProduct().getCategory()).append("\n")
+                    .append("\t\t--Precio: ").append(purchase.getProduct().getPrice()).append("\n");
+
+            Discount discount = purchase.getProduct().getDiscount();
+            if (discount != null && discount.isValid()) {
+                sb.append("\t\t--Con descuento:\n")
+                        .append("\t\t\t> Porcentaje: ").append(discount.getPercentage() * 100).append("%\n")
+                        .append("\t\t\t> Desde: ").append(discount.getFrom().format(formatter)).append("\n")
+                        .append("\t\t\t> Hasta: ").append(discount.getTo().format(formatter)).append("\n");
+            } else {
+                sb.append("\t\t--Sin descuento por el momento\n");
+            }
+
+            sb.append("\t--TOTAL: ").append(purchase.price()).append("\n")
+                    .append("_______________________________________________\n\n");
+        }
+
+        System.out.println(sb.toString());
+    }
+
 }
 
 

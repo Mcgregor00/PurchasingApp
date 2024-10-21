@@ -36,7 +36,7 @@ public class Purchase {
 
     public int price() {
         if (product.getDiscount() != null && product.getDiscount().isValid()) {
-            return (int) ((int) product.getPrice() * product.getDiscount().getPercentage());
+            return (int) (product.getPrice() - (int) product.getPrice() * product.getDiscount().getPercentage());
         }
         return product.getPrice();
     }

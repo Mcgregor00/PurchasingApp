@@ -34,7 +34,7 @@ public class Main {
         purchasingManager.getCustomer("Pedro", "Sanchez", "PedroSanchez@hotmail.com").getPurchase(2).setPayment("4020 4583 5493 0770");
 
         //Buy of first Customer, product 2
-        purchasingManager.data(1, 2);
+        purchasingManager.customerData(purchasingManager.getCustomer("Pedro", "Sanchez", "PedroSanchez@hotmail.com"));
 
     }
 }
