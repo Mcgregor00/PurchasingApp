@@ -33,7 +33,7 @@ public class Main {
         purchasingManager.purchase("Pedro", "Sanchez", "PedroSanchez@hotmail.com", 5, 1);
         purchasingManager.getCustomer("Pedro", "Sanchez", "PedroSanchez@hotmail.com").getPurchase(2).setPayment("4020 4583 5493 0770");
 
-        //Compras de luisManuel en formato ordenado
+        //Buy of first Customer, product 2
         purchasingManager.data(1, 2);
 
     }
