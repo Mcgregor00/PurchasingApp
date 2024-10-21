@@ -11,10 +11,10 @@ public class Customer {
     private String name;
     private String surname;
 
-    public Customer(String name, String surname, Email email) {
+    public Customer(String name, String surname, String email) {
         this.name = name;
         this.surname = surname;
-        this.email= email;
+        this.email = new Email(email);
         this.deliveryAddresses = new ArrayList<Address>();
         this.purchases = new ArrayList<Purchase>();
     }
@@ -40,6 +40,10 @@ public class Customer {
 
     public List<Purchase> getPurchases() {
         return purchases;
+    }
+
+    public Purchase getPurchase(int index) {
+        return purchases.get(index - 1);
     }
 
     public void addPurchase(Purchase purchase) {

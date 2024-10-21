@@ -12,12 +12,12 @@ public class Purchase {
     private Payment payment;
     private Boolean isPaid;
 
-    public Purchase(Customer customer, Product product) {
+    public Purchase(Customer customer, Product product, int numAddress) {
         this.customer = customer;
         this.product = product;
         this.id = NEXT_ID++;
         this.date = LocalDate.now();
-        this.address = customer.getDeliveryAddresses().get(0);
+        this.address = customer.getDeliveryAddresses().get(numAddress - 1);
         this.isPaid = false;
     }
 
